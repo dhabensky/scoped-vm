@@ -16,7 +16,7 @@ class MainActivity : AppCompatActivity() {
         val fm = supportFragmentManager
         if (fm.findFragmentByTag(TAG) == null) {
             fm.beginTransaction()
-                .replace(R.id.container, MainFragment())
+                .replace(R.id.container, MainFragment(), TAG)
                 .commit()
         }
     }

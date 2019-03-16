@@ -9,7 +9,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModelProviders
-import com.dhabensky.svm.ScopedRequest
 import com.dhabensky.svm.ScopedViewModelProviders
 import kotlinx.android.synthetic.main.fragment.*
 
@@ -37,13 +36,10 @@ open class ScopedFragment() : Fragment() {
 
         scope.let {
             viewModel = when (it) {
-                null -> {
-                    ViewModelProviders.of(this).get(MyViewModel::class.java)
-                }
-                else -> {
-                    viewModelFor(it)
-                }
+                null -> ViewModelProviders.of(this).get(MyViewModel::class.java)
+                else -> viewModelFor(it)
             }
+            viewModel.scope = it
         }
     }
 
@@ -72,8 +68,7 @@ open class ScopedFragment() : Fragment() {
     }
 
     fun viewModelFor(scope: String): MyViewModel {
-        val request = ScopedRequest(lifecycle, scope)
-        return ScopedViewModelProviders.of("").get(MyViewModel::class.java, request)
+        return ScopedViewModelProviders.of(scope, activity!!).get(MyViewModel::class.java, this)
     }
 
 }
