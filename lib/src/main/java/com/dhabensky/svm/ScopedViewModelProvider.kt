@@ -3,6 +3,9 @@ package com.dhabensky.svm
 import androidx.annotation.MainThread
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.*
+import com.dhabensky.svm.subscription.VMSubscription
+import com.dhabensky.svm.subscription.VMSubscriptions
+import com.dhabensky.svm.subscription.ViewModelOwnerSubscriptions
 
 /**
  * Created on 16.03.2019.
@@ -10,7 +13,7 @@ import androidx.lifecycle.*
  */
 class ScopedViewModelProvider(
     private val factory: ViewModelProvider.Factory,
-    private val store: ScopedViewModelStore,
+    private val store: ViewModelOwnerSubscriptions,
     private val scope: String
 ) {
 
@@ -30,23 +33,26 @@ class ScopedViewModelProvider(
             throw IllegalArgumentException("Cannot create ViewModel for destroyed requester")
         }
 
+        // subscriptions first
+        val subscription = VMSubscription(store, scope)
+        store.add(subscription)
+        VMSubscriptions.user(requester).add(subscription)
+
         var viewModel: ViewModel? = store.get(key, scope)
 
         if (modelClass.isInstance(viewModel)) {
-            // nothing to do
-        } else {
+            return viewModel as T
+        }
+        else {
             if (viewModel != null) {
                 // TODO: log a warning.
             }
-            viewModel = null
         }
 
-        if (viewModel == null) {
-            viewModel = factory.create(modelClass)
-        }
-        store.put(key, viewModel, scope, requester)
+        viewModel = factory.create(modelClass)
+        store.put(key, viewModel, scope)
 
-        return viewModel as T
+        return viewModel
     }
 
 }
