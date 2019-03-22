@@ -5,8 +5,8 @@ task sourceJar(type: Jar) {
     getArchiveClassifier().set('sources')
 }
 
-group = 'com.dhabensky.scovm'
-version = '0.1-SNAPSHOT'
+group = 'com.dhabensky.scoped-vm'
+version = '0.2-SNAPSHOT'
 
 publishing {
     publications {

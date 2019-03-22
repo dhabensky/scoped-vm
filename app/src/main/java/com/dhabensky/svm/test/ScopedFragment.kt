@@ -34,13 +34,8 @@ open class ScopedFragment() : Fragment() {
         super.onCreate(savedInstanceState)
         scope = arguments?.getString("SCOPE", null)
 
-        scope.let {
-            viewModel = when (it) {
-                null -> ViewModelProviders.of(this).get(MyViewModel::class.java)
-                else -> viewModelFor(it)
-            }
-            viewModel.scope = it
-        }
+        viewModel = viewModelFor(scope)
+        viewModel.scope = scope
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -67,8 +62,18 @@ open class ScopedFragment() : Fragment() {
             .commit()
     }
 
-    fun viewModelFor(scope: String): MyViewModel {
-        return ScopedViewModelProviders.of(scope, activity!!).get(MyViewModel::class.java, this)
+    fun viewModelFor(scope: String?): MyViewModel {
+        if (scope == null) {
+            return ViewModelProviders
+                .of(this)
+                .get(MyViewModel::class.java)
+        }
+        else {
+            return ScopedViewModelProviders
+                .forScope(this, scope)
+                .of(activity!!)
+                .get(MyViewModel::class.java)
+        }
     }
 
 }

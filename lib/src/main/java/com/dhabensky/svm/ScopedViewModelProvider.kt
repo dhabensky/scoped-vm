@@ -14,21 +14,22 @@ import com.dhabensky.svm.subscription.ViewModelOwnerSubscriptions
 class ScopedViewModelProvider(
     private val factory: ViewModelProvider.Factory,
     private val store: ViewModelOwnerSubscriptions,
-    private val scope: String
+    private val scope: String,
+    private val requester: Fragment
 ) {
 
     private val DEFAULT_KEY = "androidx.lifecycle.ViewModelProvider.DefaultKey"
 
     @MainThread
-    fun <T : ViewModel> get(modelClass: Class<T>, requester: Fragment): T {
+    fun <T : ViewModel> get(modelClass: Class<T>): T {
         val canonicalName = modelClass.canonicalName
             ?: throw IllegalArgumentException("Local and anonymous classes can not be ViewModels")
-        return get("$DEFAULT_KEY:$canonicalName", modelClass, requester)
+        return get("$DEFAULT_KEY:$canonicalName", modelClass)
     }
 
     @Suppress("UNCHECKED_CAST")
     @MainThread
-    fun <T : ViewModel> get(key: String, modelClass: Class<T>, requester: Fragment): T {
+    fun <T : ViewModel> get(key: String, modelClass: Class<T>): T {
         if (requester.lifecycle.currentState == Lifecycle.State.DESTROYED) {
             throw IllegalArgumentException("Cannot create ViewModel for destroyed requester")
         }
