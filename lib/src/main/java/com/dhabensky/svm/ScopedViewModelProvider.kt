@@ -5,55 +5,45 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.*
 import com.dhabensky.svm.subscription.VMSubscription
 import com.dhabensky.svm.subscription.VMSubscriptions
-import com.dhabensky.svm.subscription.ViewModelOwnerSubscriptions
 
 /**
  * Created on 16.03.2019.
  * @author dhabensky <dhabensky@yandex.ru>
  */
 class ScopedViewModelProvider(
+    private val storeOwner: ViewModelStoreOwner,
     private val factory: ViewModelProvider.Factory,
-    private val store: ViewModelOwnerSubscriptions,
-    private val scope: String,
+    private val scope: String?,
     private val requester: Fragment
 ) {
 
-    private val DEFAULT_KEY = "androidx.lifecycle.ViewModelProvider.DefaultKey"
-
     @MainThread
     fun <T : ViewModel> get(modelClass: Class<T>): T {
-        val canonicalName = modelClass.canonicalName
-            ?: throw IllegalArgumentException("Local and anonymous classes can not be ViewModels")
-        return get("$DEFAULT_KEY:$canonicalName", modelClass)
+        return get(defaultKey(modelClass), modelClass)
     }
 
-    @Suppress("UNCHECKED_CAST")
     @MainThread
     fun <T : ViewModel> get(key: String, modelClass: Class<T>): T {
-        if (requester.lifecycle.currentState == Lifecycle.State.DESTROYED) {
-            throw IllegalArgumentException("Cannot create ViewModel for destroyed requester")
-        }
+        return provider.get(key, modelClass)
+    }
 
-        // subscriptions first
-        val subscription = VMSubscription(store, scope)
-        store.add(subscription)
-        VMSubscriptions.user(requester).add(subscription)
+    private val provider by lazy {
+        ViewModelProvider(getScopedStore(), factory)
+    }
 
-        var viewModel: ViewModel? = store.get(key, scope)
+    private fun getScopedStore(): ViewModelStore {
+        if (scope != null) {
+            val owner = VMSubscriptions.owner(storeOwner)
+            // subscriptions
+            val subscription = VMSubscription(owner, scope)
+            owner.addSubscription(subscription)
+            VMSubscriptions.user(requester).addSubscription(subscription)
 
-        if (modelClass.isInstance(viewModel)) {
-            return viewModel as T
+            return owner.getScopedStore(scope)
         }
         else {
-            if (viewModel != null) {
-                // TODO: log a warning.
-            }
+            return storeOwner.viewModelStore
         }
-
-        viewModel = factory.create(modelClass)
-        store.put(key, viewModel, scope)
-
-        return viewModel
     }
 
 }

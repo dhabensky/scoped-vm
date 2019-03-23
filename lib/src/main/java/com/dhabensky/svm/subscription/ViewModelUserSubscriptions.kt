@@ -11,14 +11,14 @@ class ViewModelUserSubscriptions : ViewModel() {
 
     private val subscriptions = LinkedList<VMSubscription>()
 
-    fun add(subscription: VMSubscription) {
+    fun addSubscription(subscription: VMSubscription) {
         subscriptions.add(subscription)
     }
 
     override fun onCleared() {
         super.onCleared()
         for (sub in subscriptions) {
-            sub.wmOwner.remove(sub)
+            sub.wmOwner.removeSubscription(sub)
         }
     }
 

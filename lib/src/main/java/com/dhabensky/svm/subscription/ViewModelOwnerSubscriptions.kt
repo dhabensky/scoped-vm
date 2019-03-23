@@ -1,9 +1,6 @@
 package com.dhabensky.svm.subscription
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelStore
-import androidx.lifecycle.getViewModel
-import androidx.lifecycle.putViewModel
+import androidx.lifecycle.*
 import java.util.*
 
 /**
@@ -19,33 +16,16 @@ class ViewModelOwnerSubscriptions : ViewModel() {
 
     private val scopeMap = HashMap<String, Scope>()
 
-
-    fun get(key: String, scope: String): ViewModel? {
-        val store = scopeMap[scope]?.store ?: return null
-        return getViewModel(key, store)
+    fun getScopedStore(scopeName: String): ViewModelStore {
+        return getOrCreateScope(scopeName).store
     }
 
-    fun put(key: String, viewModel: ViewModel, scopeName: String) {
-        var scope = scopeMap[scopeName]
-        if (scope == null) {
-            scope = Scope()
-            scopeMap[scopeName] = scope
-        }
-        putViewModel(key, viewModel, scope.store)
-    }
-
-
-    fun add(subscription: VMSubscription) {
-        val name = subscription.scope
-        var scope = scopeMap[name]
-        if (scope == null) {
-            scope = Scope()
-            scopeMap[name] = scope
-        }
+    fun addSubscription(subscription: VMSubscription) {
+        val scope = getOrCreateScope(subscription.scope)
         scope.subscriptions.add(subscription)
     }
 
-    fun remove(subscription: VMSubscription) {
+    fun removeSubscription(subscription: VMSubscription) {
         val name = subscription.scope
         val scope = scopeMap[name]
         if (scope != null) {
@@ -58,6 +38,14 @@ class ViewModelOwnerSubscriptions : ViewModel() {
         }
     }
 
+    private fun getOrCreateScope(scopeName: String): Scope {
+        var scope = scopeMap[scopeName]
+        if (scope == null) {
+            scope = Scope()
+            scopeMap[scopeName] = scope
+        }
+        return scope
+    }
 
     override fun onCleared() {
         super.onCleared()
