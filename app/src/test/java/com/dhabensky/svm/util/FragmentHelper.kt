@@ -4,7 +4,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 
 /**
- * Created on 24.03.2019.
  * @author dhabensky <dhabensky@yandex.ru>
  */
 class FragmentHelper(
