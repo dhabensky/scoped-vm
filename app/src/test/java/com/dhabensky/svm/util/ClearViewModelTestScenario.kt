@@ -33,7 +33,7 @@ class ClearViewModelTestScenario(
         return this
     }
 
-    fun getVanillaViewModelForFragment(fragment: Fragment, holder: Holder<SpyableViewModel>): ClearViewModelTestScenario {
+    fun getVanillaViewModelOfFragment(fragment: Fragment, holder: Holder<SpyableViewModel>): ClearViewModelTestScenario {
         activityScenario.onActivity {
             holder.value = ViewModelProviders.of(fragment)
                 .get(SpyableViewModel::class.java)
@@ -41,7 +41,7 @@ class ClearViewModelTestScenario(
         return this
     }
 
-    fun getVanillaViewModelForActivity(holder: Holder<SpyableViewModel>): ClearViewModelTestScenario {
+    fun getVanillaViewModelOfActivity(holder: Holder<SpyableViewModel>): ClearViewModelTestScenario {
         activityScenario.onActivity {
             holder.value = ViewModelProviders.of(it)
                 .get(SpyableViewModel::class.java)

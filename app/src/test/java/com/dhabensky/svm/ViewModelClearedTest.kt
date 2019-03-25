@@ -78,6 +78,74 @@ class ViewModelClearedTest {
     }
 
     @Test
+    fun `for activity null-scope provider returns same instance as vanilla provider`() {
+        val fragment = Fragment()
+        val holder1 = Holder<SpyableViewModel>()
+        val holder2 = Holder<SpyableViewModel>()
+        val scenario = ClearViewModelTestScenario(
+            ActivityScenario.launch(EmptyActivity::class.java))
+
+        scenario
+            .addFragment(fragment)
+            .getVanillaViewModelOfActivity(holder2)
+            .getScopedViewModelOfActivity(fragment, holder1, null)
+
+        assertNotNull(holder1.value)
+        assertTrue(holder1.value === holder2.value)
+    }
+
+    @Test
+    fun `for activity vanilla provider returns same instance as null-scope provider`() {
+        val fragment = Fragment()
+        val holder1 = Holder<SpyableViewModel>()
+        val holder2 = Holder<SpyableViewModel>()
+        val scenario = ClearViewModelTestScenario(
+            ActivityScenario.launch(EmptyActivity::class.java))
+
+        scenario
+            .addFragment(fragment)
+            .getScopedViewModelOfActivity(fragment, holder1, null)
+            .getVanillaViewModelOfActivity(holder2)
+
+        assertNotNull(holder1.value)
+        assertTrue(holder1.value === holder2.value)
+    }
+
+    @Test
+    fun `for fragment null-scope provider returns same instance as vanilla provider`() {
+        val fragment = Fragment()
+        val holder1 = Holder<SpyableViewModel>()
+        val holder2 = Holder<SpyableViewModel>()
+        val scenario = ClearViewModelTestScenario(
+            ActivityScenario.launch(EmptyActivity::class.java))
+
+        scenario
+            .addFragment(fragment)
+            .getVanillaViewModelOfFragment(fragment, holder2)
+            .getScopedViewModelOfFragment(fragment, holder1, null)
+
+        assertNotNull(holder1.value)
+        assertTrue(holder1.value === holder2.value)
+    }
+
+    @Test
+    fun `for fragment vanilla provider returns same instance as null-scope provider`() {
+        val fragment = Fragment()
+        val holder1 = Holder<SpyableViewModel>()
+        val holder2 = Holder<SpyableViewModel>()
+        val scenario = ClearViewModelTestScenario(
+            ActivityScenario.launch(EmptyActivity::class.java))
+
+        scenario
+            .addFragment(fragment)
+            .getScopedViewModelOfFragment(fragment, holder1, null)
+            .getVanillaViewModelOfFragment(fragment, holder2)
+
+        assertNotNull(holder1.value)
+        assertTrue(holder1.value === holder2.value)
+    }
+
+    @Test
     fun `scope cleared when its only fragment destroyed`() {
         val fragment1 = Fragment()
         val holder = Holder<SpyableViewModel>()
@@ -128,7 +196,29 @@ class ViewModelClearedTest {
     }
 
     @Test
-    fun `scope not cleared when the only scope fragment replaced with a new one`() {
+    fun `scope cleared when its activity destroyed`() {
+        val fragment1 = Fragment()
+        val fragment2 = Fragment()
+        val holder = Holder<SpyableViewModel>()
+        val scope = "scope"
+        val scenario = ClearViewModelTestScenario(
+            ActivityScenario.launch(EmptyActivity::class.java))
+
+        scenario
+            .addFragment(fragment1)
+            .getScopedViewModelOfActivity(fragment1, holder, scope)
+            .addFragment(fragment2)
+            .getScopedViewModelOfActivity(fragment2, holder, scope)
+
+            .moveToState(Lifecycle.State.RESUMED)
+            .verifyClearedNever(holder)
+
+            .moveToState(Lifecycle.State.DESTROYED)
+            .verifyClearedOnce(holder)
+    }
+
+    @Test
+    fun `scope not cleared when the only scope fragment replaced with another one`() {
         val scope = "scope"
         val fragment1 = TestFragment(scope)
         val fragment2 = TestFragment(scope)

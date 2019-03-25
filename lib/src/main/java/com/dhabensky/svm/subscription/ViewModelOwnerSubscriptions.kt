@@ -31,7 +31,6 @@ class ViewModelOwnerSubscriptions : ViewModel() {
         if (scope != null) {
             scope.subscriptions.remove(subscription)
             if (scope.subscriptions.isEmpty()) {
-                println("scope $name cleared")
                 scope.store.clear()
                 scopeMap.remove(name)
             }
@@ -49,8 +48,7 @@ class ViewModelOwnerSubscriptions : ViewModel() {
 
     override fun onCleared() {
         super.onCleared()
-        for ((name, scope) in scopeMap.entries) {
-            println("scope $name cleared")
+        for (scope in scopeMap.values) {
             scope.store.clear()
         }
         scopeMap.clear()
