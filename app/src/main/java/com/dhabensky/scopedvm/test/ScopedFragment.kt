@@ -52,7 +52,7 @@ open class ScopedFragment() : Fragment() {
 
     val fm: FragmentManager
         get() {
-            return (activity as AppCompatActivity).supportFragmentManager!!
+            return (activity as AppCompatActivity).supportFragmentManager
         }
 
     fun replaceFragment(newFragment: Fragment) {

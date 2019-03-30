@@ -1,5 +1,4 @@
 apply plugin: 'com.android.library'
-apply plugin: 'kotlin-android'
 
 android {
     compileSdkVersion 28
@@ -7,7 +6,6 @@ android {
     defaultConfig {
         minSdkVersion 15
         targetSdkVersion 28
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 }
 
@@ -15,12 +13,6 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-viewmodel:2.0.0'
     implementation 'androidx.fragment:fragment:1.0.0'
     implementation 'androidx.core:core:1.0.1'
-
-    testImplementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test:core:1.1.0'
-    androidTestImplementation 'androidx.test:runner:1.1.1'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
 }
 
 apply from: 'publish.gradle'

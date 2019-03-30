@@ -1,5 +1,6 @@
 package com.dhabensky.scopedvm.test.app
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
 import com.dhabensky.scopedvm.test.ScopedFragment
@@ -8,10 +9,14 @@ import com.dhabensky.scopedvm.test.ScopedFragment
  * Created on 16.03.2019.
  * @author dhabensky <dhabensky@yandex.ru>
  */
-class DetailFragment
-@JvmOverloads constructor(
-    var tempData: String? = null
-) : ScopedFragment() {
+class DetailFragment() : ScopedFragment() {
+
+    private var tempData: String? = null
+
+    @SuppressLint("ValidFragment")
+    constructor(tempData: String?) : this() {
+        this.tempData = tempData
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
