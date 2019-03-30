@@ -6,7 +6,7 @@ task sourceJar(type: Jar) {
 }
 
 group = 'com.dhabensky.scoped-vm'
-version = '0.2-SNAPSHOT'
+version = '0.3'
 
 publishing {
     publications {
