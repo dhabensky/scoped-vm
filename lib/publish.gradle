@@ -1,32 +1,32 @@
 apply plugin: 'maven-publish'
 
 task sourceJar(type: Jar) {
-    from android.sourceSets.main.java.srcDirs
-    getArchiveClassifier().set('sources')
+	from android.sourceSets.main.java.srcDirs
+	getArchiveClassifier().set('sources')
 }
 
 publishing {
-    publications {
-        aar(MavenPublication) {
-            groupId group
-            version version
+	publications {
+		aar(MavenPublication) {
+			groupId group
+			version version
 
-            // Tell maven to prepare the generated "*.aar" file for publishing
-            artifact("$buildDir/outputs/aar/${project.getName()}-${version}.aar")
-            artifact(sourceJar)
+			// Tell maven to prepare the generated "*.aar" file for publishing
+			artifact("$buildDir/outputs/aar/${project.getName()}-${version}.aar")
+			artifact(sourceJar)
 
-            // kinda magic to add project dependencies to generated pom.xml
-            pom.withXml {
-                def dependencies = asNode().appendNode('dependencies')
-                configurations.getByName("implementation").allDependencies.each {
-                    if (it.name != 'unspecified') {
-                        def dependency = dependencies.appendNode('dependency')
-                        dependency.appendNode('groupId', it.group)
-                        dependency.appendNode('artifactId', it.name)
-                        dependency.appendNode('version', it.version)
-                    }
-                }
-            }
-        }
-    }
+			// kinda magic to add project dependencies to generated pom.xml
+			pom.withXml {
+				def dependencies = asNode().appendNode('dependencies')
+				configurations.getByName("implementation").allDependencies.each {
+					if (it.name != 'unspecified') {
+						def dependency = dependencies.appendNode('dependency')
+						dependency.appendNode('groupId', it.group)
+						dependency.appendNode('artifactId', it.name)
+						dependency.appendNode('version', it.version)
+					}
+				}
+			}
+		}
+	}
 }

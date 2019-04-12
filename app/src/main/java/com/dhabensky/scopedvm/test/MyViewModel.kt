@@ -8,12 +8,12 @@ import androidx.lifecycle.ViewModel
  */
 class MyViewModel : ViewModel() {
 
-    var scope: String? = null
-    var data: String? = null
+	var scope: String? = null
+	var data: String? = null
 
-    override fun onCleared() {
-        super.onCleared()
-        println("vm {scope: $scope, data: $data} cleared")
-    }
+	override fun onCleared() {
+		super.onCleared()
+		println("vm {scope: $scope, data: $data} cleared")
+	}
 
 }

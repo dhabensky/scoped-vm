@@ -8,9 +8,9 @@ import androidx.annotation.NonNull;
  */
 public class Subscription {
 
-	public final SubscriptionHost host;
-	public final String scope;
-	public final SubscriptionClient client;
+	public final @NonNull SubscriptionHost host;
+	public final @NonNull String scope;
+	public final @NonNull SubscriptionClient client;
 
 	public Subscription(@NonNull SubscriptionHost host,
 	                    @NonNull String scope,

@@ -1,18 +1,18 @@
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 28
+	compileSdkVersion 28
 
-    defaultConfig {
-        minSdkVersion 15
-        targetSdkVersion 28
-    }
+	defaultConfig {
+		minSdkVersion 15
+		targetSdkVersion 28
+	}
 }
 
 dependencies {
-    implementation 'androidx.lifecycle:lifecycle-viewmodel:2.0.0'
-    implementation 'androidx.fragment:fragment:1.0.0'
-    implementation 'androidx.core:core:1.0.1'
+	implementation 'androidx.lifecycle:lifecycle-viewmodel:2.0.0'
+	implementation 'androidx.fragment:fragment:1.0.0'
+	implementation 'androidx.core:core:1.0.1'
 }
 
 group = 'com.dhabensky.scoped-vm'

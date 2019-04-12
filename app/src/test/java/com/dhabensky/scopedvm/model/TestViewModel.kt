@@ -7,12 +7,12 @@ import androidx.lifecycle.ViewModel
  */
 class TestViewModel : ViewModel() {
 
-    override fun onCleared() {
-        super.onCleared()
-        clearedTimes++
-    }
+	override fun onCleared() {
+		super.onCleared()
+		clearedTimes++
+	}
 
-    var clearedTimes = 0
-        private set
+	var clearedTimes = 0
+		private set
 
 }

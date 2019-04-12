@@ -10,11 +10,11 @@ import com.dhabensky.scopedvm.test.ScopedFragment
  */
 class MainFragment : ScopedFragment() {
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        view.setOnClickListener {
-            replaceFragment(SearchFragment())
-        }
-    }
+	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+		super.onViewCreated(view, savedInstanceState)
+		view.setOnClickListener {
+			replaceFragment(SearchFragment())
+		}
+	}
 
 }

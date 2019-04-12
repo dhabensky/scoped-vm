@@ -10,12 +10,12 @@ import com.dhabensky.scopedvm.test.ScopedFragment
  */
 class ListFragment : ScopedFragment("Search") {
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        view.setOnClickListener {
-            viewModelFor("detail").data = "set from list"
-            replaceFragment(DetailFragment("temp_data"))
-        }
-    }
+	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+		super.onViewCreated(view, savedInstanceState)
+		view.setOnClickListener {
+			viewModelFor("detail").data = "set from list"
+			replaceFragment(DetailFragment("temp_data"))
+		}
+	}
 
 }

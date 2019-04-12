@@ -4,42 +4,42 @@ apply plugin: 'kotlin-android-extensions'
 
 android {
 
-    compileSdkVersion 28
+	compileSdkVersion 28
 
-    defaultConfig {
-        applicationId "com.dhabensky.svm"
-        minSdkVersion 21
-        targetSdkVersion 28
-        versionCode 1
-        versionName "1.0"
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        testOptions.unitTests.includeAndroidResources = true
-    }
+	defaultConfig {
+		applicationId "com.dhabensky.svm"
+		minSdkVersion 21
+		targetSdkVersion 28
+		versionCode 1
+		versionName "1.0"
+		testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+		testOptions.unitTests.includeAndroidResources = true
+	}
 
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-        }
-    }
+	buildTypes {
+		release {
+			minifyEnabled false
+			proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+		}
+	}
 }
 
 dependencies {
-    implementation project(":lib")
+	implementation project(":lib")
 
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0'
-    implementation 'androidx.appcompat:appcompat:1.0.2'
-    implementation 'androidx.core:core-ktx:1.0.1'
+	implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+	implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0'
+	implementation 'androidx.appcompat:appcompat:1.0.2'
+	implementation 'androidx.core:core-ktx:1.0.1'
 
-    testImplementation 'junit:junit:4.12'
-    testImplementation 'org.robolectric:robolectric:4.2'
-    debugImplementation 'androidx.fragment:fragment-testing:1.1.0-alpha06'
-//    testImplementation 'org.mockito:mockito-core:2.1.0'
-//    testImplementation 'net.bytebuddy:byte-buddy:1.7.9'
-//    testImplementation 'org.objenesis:objenesis:2.4'
+	testImplementation 'junit:junit:4.12'
+	testImplementation 'org.robolectric:robolectric:4.2'
+	debugImplementation 'androidx.fragment:fragment-testing:1.1.0-alpha06'
+//	testImplementation 'org.mockito:mockito-core:2.1.0'
+//	testImplementation 'net.bytebuddy:byte-buddy:1.7.9'
+//	testImplementation 'org.objenesis:objenesis:2.4'
 
-    androidTestImplementation 'androidx.test:core:1.1.0'
-    androidTestImplementation 'androidx.test:runner:1.1.1'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
+	androidTestImplementation 'androidx.test:core:1.1.0'
+	androidTestImplementation 'androidx.test:runner:1.1.1'
+	androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
 }

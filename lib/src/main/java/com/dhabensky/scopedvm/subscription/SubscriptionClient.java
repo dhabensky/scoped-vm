@@ -19,8 +19,7 @@ public class SubscriptionClient extends ViewModel {
 			return false;
 		}
 		for (Subscription sub : subscriptions) {
-			if (sub.host == subscription.host &&
-					sub.scope.equals(subscription.scope)) {
+			if (sub.host == subscription.host && sub.scope.equals(subscription.scope)) {
 				return true;
 			}
 		}

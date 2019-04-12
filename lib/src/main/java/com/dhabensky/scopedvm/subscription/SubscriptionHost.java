@@ -1,5 +1,7 @@
 package com.dhabensky.scopedvm.subscription;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
@@ -7,7 +9,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelStore;

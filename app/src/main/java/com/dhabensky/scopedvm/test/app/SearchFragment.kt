@@ -12,16 +12,16 @@ import java.util.*
  */
 class SearchFragment : ScopedFragment("Search") {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        viewModel.data = SimpleDateFormat("HH:mm:ss").format(Date())
-    }
+	override fun onCreate(savedInstanceState: Bundle?) {
+		super.onCreate(savedInstanceState)
+		viewModel.data = SimpleDateFormat("HH:mm:ss").format(Date())
+	}
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        view.setOnClickListener {
-            replaceFragment(ListFragment())
-        }
-    }
+	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+		super.onViewCreated(view, savedInstanceState)
+		view.setOnClickListener {
+			replaceFragment(ListFragment())
+		}
+	}
 
 }

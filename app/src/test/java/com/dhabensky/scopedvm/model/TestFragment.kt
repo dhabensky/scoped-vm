@@ -8,26 +8,26 @@ import com.dhabensky.scopedvm.ScopedViewModelProviders
  * @author dhabensky <dhabensky@yandex.ru>
  */
 class TestFragment(
-    scope: String?
+		scope: String?
 ) : Fragment() {
 
-    constructor() : this(null)
+	constructor() : this(null)
 
-    private var scope: String? = null
+	private var scope: String? = null
 
-    init {
-        arguments = Bundle().apply {
-            putString("scope", scope)
-        }
-    }
+	init {
+		arguments = Bundle().apply {
+			putString("scope", scope)
+		}
+	}
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        scope = arguments?.getString("scope")
+	override fun onCreate(savedInstanceState: Bundle?) {
+		super.onCreate(savedInstanceState)
+		scope = arguments?.getString("scope")
 
-        ScopedViewModelProviders.forScope(this, scope)
-            .of(activity!!)
-            .get(TestViewModel::class.java)
-    }
+		ScopedViewModelProviders.forScope(this, scope)
+				.of(activity!!)
+				.get(TestViewModel::class.java)
+	}
 
 }

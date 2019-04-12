@@ -11,23 +11,23 @@ import com.dhabensky.scopedvm.test.ScopedFragment
  */
 class DetailFragment() : ScopedFragment() {
 
-    private var tempData: String? = null
+	private var tempData: String? = null
 
-    @SuppressLint("ValidFragment")
-    constructor(tempData: String?) : this() {
-        this.tempData = tempData
-    }
+	@SuppressLint("ValidFragment")
+	constructor(tempData: String?) : this() {
+		this.tempData = tempData
+	}
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        viewModel.data = tempData
-    }
+	override fun onCreate(savedInstanceState: Bundle?) {
+		super.onCreate(savedInstanceState)
+		viewModel.data = tempData
+	}
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        view.setOnClickListener {
-//            replaceFragment(SearchFragment())
-        }
-    }
+	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+		super.onViewCreated(view, savedInstanceState)
+		view.setOnClickListener {
+//			replaceFragment(SearchFragment())
+		}
+	}
 
 }
