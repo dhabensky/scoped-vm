@@ -9,7 +9,9 @@ import com.dhabensky.scopedvm.ScopedViewModelProviders
  */
 class TestFragment(
     scope: String?
-): Fragment() {
+) : Fragment() {
+
+    constructor() : this(null)
 
     private var scope: String? = null
 
@@ -25,7 +27,7 @@ class TestFragment(
 
         ScopedViewModelProviders.forScope(this, scope)
             .of(activity!!)
-            .get(SpyableViewModel::class.java)
+            .get(TestViewModel::class.java)
     }
 
 }

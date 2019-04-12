@@ -1,10 +1,13 @@
 package com.dhabensky.scopedvm.subscription;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelStore;
@@ -13,7 +16,7 @@ import androidx.lifecycle.ViewModelStore;
  * Created on 30.03.2019.
  * @author dhabensky <dhabensky@yandex.ru>
  */
-public class OwnerSubscriptions extends ViewModel {
+public class SubscriptionHost extends ViewModel {
 
 	private static class Scope {
 		Set<Subscription> subscriptions = new LinkedHashSet<>();
@@ -23,12 +26,14 @@ public class OwnerSubscriptions extends ViewModel {
 	private Map<String, Scope> scopeMap = new HashMap<>();
 
 
-	public @NonNull
-	ViewModelStore getScopedStore(@NonNull String scopeName) {
+	public @NonNull ViewModelStore getScopedStore(@NonNull String scopeName) {
 		return getOrCreateScope(scopeName).store;
 	}
 
 	public void addSubscription(@NonNull Subscription subscription) {
+		if (subscription.host != this) {
+			throw new IllegalArgumentException("Cannot add subscription from another client");
+		}
 		Scope scope = getOrCreateScope(subscription.scope);
 		scope.subscriptions.add(subscription);
 	}
@@ -37,12 +42,24 @@ public class OwnerSubscriptions extends ViewModel {
 		String name = subscription.scope;
 		Scope scope = scopeMap.get(name);
 		if (scope != null) {
-			scope.subscriptions.remove(subscription);
+			boolean removed = scope.subscriptions.remove(subscription);
+			if (!removed) {
+				Log.w("SCOPED-VM",
+						"subscription " + subscription + " was not found in " + this);
+			}
 			if (scope.subscriptions.isEmpty()) {
 				scope.store.clear();
 				scopeMap.remove(name);
 			}
 		}
+	}
+
+	public List<Subscription> getSubscriptions() {
+		List<Subscription> res = new ArrayList<>();
+		for (Scope scope : scopeMap.values()) {
+			res.addAll(scope.subscriptions);
+		}
+		return res;
 	}
 
 	private @NonNull Scope getOrCreateScope(@NonNull String scopeName) {

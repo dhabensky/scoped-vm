@@ -1,6 +1,7 @@
 package com.dhabensky.scopedvm.subscription;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelHack;
 import androidx.lifecycle.ViewModelStore;
@@ -12,17 +13,37 @@ import androidx.lifecycle.ViewModelStoreOwner;
  */
 public class Subscriptions {
 
-	public static @NonNull OwnerSubscriptions owner(@NonNull ViewModelStoreOwner storeOwner) {
+	public static @NonNull ViewModelStore getScopedStore(@NonNull ViewModelStoreOwner hostOwner,
+	                                                     @Nullable String scope,
+	                                                     @NonNull ViewModelStoreOwner clientOwner) {
+		if (scope != null) {
+			SubscriptionHost host = Subscriptions.host(hostOwner);
+			SubscriptionClient client = Subscriptions.client(clientOwner);
+
+			Subscription sub = new Subscription(host, scope, client);
+			if (!client.hasSubscription(sub)) {
+				host.addSubscription(sub);
+				client.addSubscription(sub);
+			}
+
+			return host.getScopedStore(scope);
+		}
+		else {
+			return hostOwner.getViewModelStore();
+		}
+	}
+
+	public static @NonNull SubscriptionHost host(@NonNull ViewModelStoreOwner hostOwner) {
 		return getOrNewInstance(
-				OwnerSubscriptions.class,
-				storeOwner.getViewModelStore()
+				SubscriptionHost.class,
+				hostOwner.getViewModelStore()
 		);
 	}
 
-	public static @NonNull UserSubscriptions user(@NonNull ViewModelStoreOwner storeOwner) {
-		return Subscriptions.getOrNewInstance(
-				UserSubscriptions.class,
-				storeOwner.getViewModelStore()
+	public static @NonNull SubscriptionClient client(@NonNull ViewModelStoreOwner clientOwner) {
+		return getOrNewInstance(
+				SubscriptionClient.class,
+				clientOwner.getViewModelStore()
 		);
 	}
 

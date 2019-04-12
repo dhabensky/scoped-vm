@@ -5,9 +5,6 @@ task sourceJar(type: Jar) {
     getArchiveClassifier().set('sources')
 }
 
-group = 'com.dhabensky.scoped-vm'
-version = '0.3'
-
 publishing {
     publications {
         aar(MavenPublication) {

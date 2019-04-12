@@ -8,12 +8,24 @@ import androidx.annotation.NonNull;
  */
 public class Subscription {
 
-	public final OwnerSubscriptions ownerSubscriptions;
+	public final SubscriptionHost host;
 	public final String scope;
+	public final SubscriptionClient client;
 
-	public Subscription(@NonNull OwnerSubscriptions vmOwner, @NonNull String scope) {
-		this.ownerSubscriptions = vmOwner;
+	public Subscription(@NonNull SubscriptionHost host,
+	                    @NonNull String scope,
+	                    @NonNull SubscriptionClient client) {
+		this.host = host;
 		this.scope = scope;
+		this.client = client;
+	}
+
+	@Override
+	public String toString() {
+		return "Subscription{" +
+				"host=" + host +
+				", scope='" + scope + '\'' +
+				", client=" + client + '}';
 	}
 
 }

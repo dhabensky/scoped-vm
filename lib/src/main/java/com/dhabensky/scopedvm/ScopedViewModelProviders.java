@@ -1,12 +1,17 @@
 package com.dhabensky.scopedvm;
 
+import com.dhabensky.scopedvm.subscription.Subscriptions;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.Lifecycle;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProvider.Factory;
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory;
+import androidx.lifecycle.ViewModelStore;
+import androidx.lifecycle.ViewModelStoreOwner;
 
 /**
  * Created on 30.03.2019.
@@ -14,46 +19,46 @@ import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory;
  */
 public class ScopedViewModelProviders {
 
-	private final @NonNull Fragment requester;
+	private final @NonNull ViewModelStoreOwner client;
 	private final @Nullable String scope;
 
-	private ScopedViewModelProviders(@NonNull Fragment requester, @Nullable String scope) {
-		this.requester = requester;
+	private ScopedViewModelProviders(@NonNull ViewModelStoreOwner client, @Nullable String scope) {
+		this.client = client;
 		this.scope = scope;
 	}
 
-	public static ScopedViewModelProviders forScope(@NonNull Fragment requester,
-	                                                @Nullable String scope) {
+	public static ScopedViewModelProviders forScope(@NonNull Fragment fragment, @Nullable String scope) {
 
-		if (requester.getLifecycle().getCurrentState() == Lifecycle.State.DESTROYED) {
+		if (fragment.getLifecycle().getCurrentState() == Lifecycle.State.DESTROYED) {
 			throw new IllegalArgumentException(
-					"Cannot create ScopedViewModelProvider for destroyed requester");
+					"Cannot create ScopedViewModelProvider for destroyed client");
 		}
-		return new ScopedViewModelProviders(requester, scope);
+		return new ScopedViewModelProviders(fragment, scope);
 	}
 
 
-	public ScopedViewModelProvider of(@NonNull FragmentActivity activity,
-	                                  @NonNull Factory factory) {
-
-		return new ScopedViewModelProvider(activity, factory, scope, requester);
+	public ViewModelProvider of(@NonNull FragmentActivity activity) {
+		Factory factory = AndroidViewModelFactory.getInstance(activity.getApplication());
+		return of(activity, factory);
 	}
 
-	public ScopedViewModelProvider of(@NonNull FragmentActivity activity) {
-		Factory factory = AndroidViewModelFactory
-				.getInstance(activity.getApplication());
-		return new ScopedViewModelProvider(activity, factory, scope, requester);
+	public ViewModelProvider of(@NonNull FragmentActivity activity, @NonNull Factory factory) {
+		return ofStore(activity, factory);
 	}
 
-	public ScopedViewModelProvider of(@NonNull Fragment fragment,
-	                                  @NonNull Factory factory) {
-		return new ScopedViewModelProvider(fragment, factory, scope, requester);
-	}
-
-	public ScopedViewModelProvider of(@NonNull Fragment fragment) {
+	public ViewModelProvider of(@NonNull Fragment fragment) {
 		Factory factory = AndroidViewModelFactory
 				.getInstance(fragment.getActivity().getApplication());
-		return new ScopedViewModelProvider(fragment, factory, scope, requester);
+		return of(fragment, factory);
+	}
+
+	public ViewModelProvider of(@NonNull Fragment fragment, @NonNull Factory factory) {
+		return ofStore(fragment, factory);
+	}
+
+	private ViewModelProvider ofStore(@NonNull ViewModelStoreOwner host, @NonNull Factory factory) {
+		ViewModelStore store = Subscriptions.getScopedStore(host, scope, client);
+		return new ViewModelProvider(store, factory);
 	}
 
 }
