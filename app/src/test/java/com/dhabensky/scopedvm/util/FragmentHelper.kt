@@ -28,8 +28,8 @@ class FragmentHelper(
 		return this
 	}
 
-	fun addToBackStack(): FragmentHelper {
-		transaction.addToBackStack(null)
+	fun addToBackStack(name: String? = null): FragmentHelper {
+		transaction.addToBackStack(name)
 		return this
 	}
 

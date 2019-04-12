@@ -2,7 +2,11 @@ package com.dhabensky.scopedvm
 
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.ViewModelProviders
 import androidx.test.core.app.ActivityScenario
+import com.dhabensky.scopedvm.nested.MasterFragment
+import com.dhabensky.scopedvm.nested.NestedFragment
+import com.dhabensky.scopedvm.nested.NestedFragmentWithViewModel
 import com.dhabensky.scopedvm.model.Holder
 import com.dhabensky.scopedvm.model.TestFragment
 import com.dhabensky.scopedvm.model.TestViewModel
@@ -12,6 +16,7 @@ import com.dhabensky.scopedvm.test.EmptyActivity
 import com.dhabensky.scopedvm.util.ClearViewModelTestScenario
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue
+import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
@@ -284,6 +289,80 @@ class ViewModelClearedTest {
 					owner.value = Subscriptions.host(it)
 				}
 				.verifySubscriptionCount(owner, 0)
+	}
+
+	@Test
+	@Ignore
+	fun `fragment in backstack does not leak viewmodel`() {
+		val nestedWithViewModel = NestedFragmentWithViewModel()
+		val holder = Holder<TestViewModel>()
+		val scenario = ClearViewModelTestScenario(
+				ActivityScenario.launch(EmptyActivity::class.java))
+
+		scenario
+				.moveToState(Lifecycle.State.RESUMED)
+				.fragments {
+					it.replace(nestedWithViewModel)
+							.addToBackStack("initial")
+				}
+				.apply {
+					holder.value = ViewModelProviders.of(nestedWithViewModel)
+							.get(TestViewModel::class.java)
+				}
+				.fragments {
+					it.replace(NestedFragment())
+							.addToBackStack()
+				}
+				.apply {
+					println("recreating")
+					activityScenario.recreate()
+					println("recreated")
+				}
+				.moveToState(Lifecycle.State.DESTROYED)
+				.verifyClearedOnce(holder)
+	}
+
+	@Test
+	@Ignore
+	fun `nested fragment in backstack does not leak viewmodel`() {
+		val nestedWithViewModel = NestedFragmentWithViewModel()
+		val holder = Holder<TestViewModel>()
+		val scenario = ClearViewModelTestScenario(
+				ActivityScenario.launch(EmptyActivity::class.java))
+
+		scenario
+				.fragments {
+					it.add(MasterFragment())
+							.addToBackStack("master")
+				}
+				.moveToState(Lifecycle.State.RESUMED)
+				.mainFragmentManager {
+					it.beginTransaction()
+							.replace(1, nestedWithViewModel)
+							.addToBackStack("nested 1")
+							.commit()
+				}
+				.apply {
+					holder.value = ViewModelProviders.of(nestedWithViewModel)
+							.get(TestViewModel::class.java)
+				}
+				.mainFragmentManager {
+					it.beginTransaction()
+							.replace(1, NestedFragment())
+							.addToBackStack("nested 2")
+							.commit()
+				}
+				.apply {
+					println("recreating")
+					activityScenario.recreate()
+					println("recreated")
+				}
+				.apply {
+					println("destroying")
+					moveToState(Lifecycle.State.DESTROYED)
+					println("destroyed")
+				}
+				.verifyClearedOnce(holder)
 	}
 
 }

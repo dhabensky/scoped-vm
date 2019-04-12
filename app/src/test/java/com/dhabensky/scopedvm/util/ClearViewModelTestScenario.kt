@@ -2,6 +2,7 @@ package com.dhabensky.scopedvm.util
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProviders
 import androidx.test.core.app.ActivityScenario
@@ -108,6 +109,16 @@ class ClearViewModelTestScenario(
 			val helper = FragmentHelper(it, R.id.container)
 			action.invoke(helper)
 			helper.transaction.commit()
+		}
+		return this
+	}
+
+	fun mainFragmentManager(action: (FragmentManager) -> Unit): ClearViewModelTestScenario {
+		activityScenario.onActivity {
+			val fm = it.supportFragmentManager
+			val mainFragment = fm.fragments[0]
+			val mfm = mainFragment.childFragmentManager
+			action.invoke(mfm)
 		}
 		return this
 	}
