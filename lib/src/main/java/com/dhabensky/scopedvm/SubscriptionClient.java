@@ -1,4 +1,4 @@
-package com.dhabensky.scopedvm.subscription;
+package com.dhabensky.scopedvm;
 
 import java.util.LinkedList;
 import java.util.List;

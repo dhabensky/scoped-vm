@@ -1,4 +1,4 @@
-package com.dhabensky.scopedvm.subscription;
+package com.dhabensky.scopedvm;
 
 import android.util.Log;
 

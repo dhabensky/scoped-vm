@@ -6,9 +6,9 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProviders
 import androidx.test.core.app.ActivityScenario
 import com.dhabensky.scopedvm.ScopedViewModelProviders
+import com.dhabensky.scopedvm.SubscriptionHost
 import com.dhabensky.scopedvm.model.Holder
 import com.dhabensky.scopedvm.model.TestViewModel
-import com.dhabensky.scopedvm.subscription.SubscriptionHost
 import com.dhabensky.scopedvm.test.R
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo

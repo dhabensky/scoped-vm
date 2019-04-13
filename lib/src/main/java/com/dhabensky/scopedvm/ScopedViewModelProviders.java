@@ -1,7 +1,5 @@
 package com.dhabensky.scopedvm;
 
-import com.dhabensky.scopedvm.subscription.Subscriptions;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -27,7 +25,8 @@ public class ScopedViewModelProviders {
 		this.scope = scope;
 	}
 
-	public static ScopedViewModelProviders forScope(@NonNull Fragment fragment, @Nullable String scope) {
+	public static ScopedViewModelProviders forScope(@NonNull Fragment fragment,
+	                                                @Nullable String scope) {
 
 		if (fragment.getLifecycle().getCurrentState() == Lifecycle.State.DESTROYED) {
 			throw new IllegalArgumentException(

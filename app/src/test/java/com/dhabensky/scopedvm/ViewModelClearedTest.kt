@@ -8,8 +8,6 @@ import com.dhabensky.scopedvm.model.FragmentWithViewModel
 import com.dhabensky.scopedvm.model.Holder
 import com.dhabensky.scopedvm.model.TestFragment
 import com.dhabensky.scopedvm.model.TestViewModel
-import com.dhabensky.scopedvm.subscription.SubscriptionHost
-import com.dhabensky.scopedvm.subscription.Subscriptions
 import com.dhabensky.scopedvm.test.EmptyActivity
 import com.dhabensky.scopedvm.util.ClearViewModelTestScenario
 import org.junit.Assert.assertNotNull
