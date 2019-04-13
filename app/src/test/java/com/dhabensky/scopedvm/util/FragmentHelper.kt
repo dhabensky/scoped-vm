@@ -1,17 +1,17 @@
 package com.dhabensky.scopedvm.util
 
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.FragmentManager
 
 /**
  * @author dhabensky <dhabensky@yandex.ru>
  */
 class FragmentHelper(
-		activity: FragmentActivity,
+		fragmentManager: FragmentManager,
 		private val containerId: Int
 ) {
 
-	val transaction = activity.supportFragmentManager.beginTransaction()
+	val transaction = fragmentManager.beginTransaction()
 
 	fun add(frag: Fragment): FragmentHelper {
 		transaction.add(containerId, frag)

@@ -1,4 +1,4 @@
-package com.dhabensky.scopedvm.nested
+package com.dhabensky.scopedvm.model
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -23,10 +23,6 @@ class MasterFragment : Fragment() {
 	}
 
 	override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-		return createView(inflater)
-	}
-
-	private fun createView(inflater: LayoutInflater): View {
 		return FrameLayout(inflater.context).apply {
 			layoutParams = ViewGroup.LayoutParams(
 					ViewGroup.LayoutParams.MATCH_PARENT,
