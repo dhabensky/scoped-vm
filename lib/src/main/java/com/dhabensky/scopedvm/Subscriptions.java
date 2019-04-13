@@ -2,7 +2,8 @@ package com.dhabensky.scopedvm;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.lifecycle.ViewModelHack;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelStore;
 import androidx.lifecycle.ViewModelStoreOwner;
 
@@ -33,17 +34,20 @@ public class Subscriptions {
 	}
 
 	public static @NonNull SubscriptionHost host(@NonNull ViewModelStoreOwner hostOwner) {
-		return ViewModelHack.getOrNewInstance(
-				SubscriptionHost.class,
-				hostOwner.getViewModelStore()
-		);
+		return getViewModel(hostOwner.getViewModelStore(), SubscriptionHost.class);
 	}
 
 	public static @NonNull SubscriptionClient client(@NonNull ViewModelStoreOwner clientOwner) {
-		return ViewModelHack.getOrNewInstance(
-				SubscriptionClient.class,
-				clientOwner.getViewModelStore()
-		);
+		return getViewModel(clientOwner.getViewModelStore(), SubscriptionClient.class);
+	}
+
+	@NonNull
+	private static <T extends ViewModel> T getViewModel(@NonNull ViewModelStore store,
+	                                                    @NonNull Class<T> modelClass) {
+
+		ViewModelProvider.Factory factory = new ViewModelProvider.NewInstanceFactory();
+		ViewModelProvider provider = new ViewModelProvider(store, factory);
+		return provider.get(modelClass);
 	}
 
 }
