@@ -12,16 +12,6 @@ import androidx.fragment.app.Fragment
  */
 class MasterFragment : Fragment() {
 
-	override fun onCreate(savedInstanceState: Bundle?) {
-		super.onCreate(savedInstanceState)
-		println(" - MasterFragment created")
-	}
-
-	override fun onDestroy() {
-		println(" - MasterFragment destroyed")
-		super.onDestroy()
-	}
-
 	override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 		return FrameLayout(inflater.context).apply {
 			layoutParams = ViewGroup.LayoutParams(

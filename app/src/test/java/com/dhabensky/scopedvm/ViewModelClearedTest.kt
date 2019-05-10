@@ -4,7 +4,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.test.core.app.ActivityScenario
 import com.dhabensky.scopedvm.model.MasterFragment
-import com.dhabensky.scopedvm.model.FragmentWithViewModel
 import com.dhabensky.scopedvm.model.Holder
 import com.dhabensky.scopedvm.model.TestFragment
 import com.dhabensky.scopedvm.model.TestViewModel
@@ -12,7 +11,6 @@ import com.dhabensky.scopedvm.test.EmptyActivity
 import com.dhabensky.scopedvm.util.ClearViewModelTestScenario
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue
-import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
@@ -288,35 +286,30 @@ class ViewModelClearedTest {
 	}
 
 	@Test
-	@Ignore
 	fun `fragment in backstack does not leak viewmodel`() {
-		val nestedWithViewModel = FragmentWithViewModel()
+		val fragmentInBackStack = Fragment()
 		val holder = Holder<TestViewModel>()
 		val scenario = ClearViewModelTestScenario(
 				ActivityScenario.launch(EmptyActivity::class.java))
 
 		scenario
 				.moveToState(Lifecycle.State.RESUMED)
-				.replaceFragment(nestedWithViewModel, true)
-				.getVanillaViewModelOfFragment(nestedWithViewModel, holder)
+				.replaceFragment(fragmentInBackStack, true)
+				.getScopedViewModelOfFragment(fragmentInBackStack, holder, "scope")
+
 				.replaceFragment(Fragment(), true)
-				.apply {
-					println("recreating")
-					recreate()
-					println("recreated")
-				}
-				.apply {
-					println("destroying")
-					moveToState(Lifecycle.State.DESTROYED)
-					println("destroyed")
-				}
+				.verifyClearedNever(holder)
+
+				.recreate()
+				.verifyClearedNever(holder)
+
+				.moveToState(Lifecycle.State.DESTROYED)
 				.verifyClearedOnce(holder)
 	}
 
 	@Test
-	@Ignore
 	fun `nested fragment in backstack does not leak viewmodel`() {
-		val nestedWithViewModel = FragmentWithViewModel()
+		val fragmentInBackStack = Fragment()
 		val holder = Holder<TestViewModel>()
 		val scenario = ClearViewModelTestScenario(
 				ActivityScenario.launch(EmptyActivity::class.java))
@@ -325,22 +318,19 @@ class ViewModelClearedTest {
 				.addFragment(MasterFragment(), true)
 				.moveToState(Lifecycle.State.RESUMED)
 				.nestedFragments {
-					it.replace(nestedWithViewModel).addToBackStack()
+					it.replace(fragmentInBackStack).addToBackStack()
 				}
-				.getVanillaViewModelOfFragment(nestedWithViewModel, holder)
+				.getScopedViewModelOfFragment(fragmentInBackStack, holder, "scope")
+
 				.nestedFragments {
 					it.replace(Fragment()).addToBackStack()
 				}
-				.apply {
-					println("recreating")
-					recreate()
-					println("recreated")
-				}
-				.apply {
-					println("destroying")
-					moveToState(Lifecycle.State.DESTROYED)
-					println("destroyed")
-				}
+				.verifyClearedNever(holder)
+
+				.recreate()
+				.verifyClearedNever(holder)
+
+				.moveToState(Lifecycle.State.DESTROYED)
 				.verifyClearedOnce(holder)
 	}
 
