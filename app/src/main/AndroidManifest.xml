@@ -12,15 +12,7 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
 
-        <activity android:name="com.dhabensky.scopedvm.test.MainActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
-        </activity>
-
-        <activity android:name="com.dhabensky.scopedvm.test.EmptyActivity"/>
+        <activity android:name="com.dhabensky.scopedvm.EmptyActivity"/>
 
     </application>
 

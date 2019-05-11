@@ -7,7 +7,6 @@ import com.dhabensky.scopedvm.model.MasterFragment
 import com.dhabensky.scopedvm.model.Holder
 import com.dhabensky.scopedvm.model.TestFragment
 import com.dhabensky.scopedvm.model.TestViewModel
-import com.dhabensky.scopedvm.test.EmptyActivity
 import com.dhabensky.scopedvm.util.ClearViewModelTestScenario
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue
@@ -27,11 +26,8 @@ class ViewModelClearedTest {
 	fun `viewModel of activity cleared when activity destroyed`() {
 		val fragment = Fragment()
 		val holder = Holder<TestViewModel>()
-		val scenario = ClearViewModelTestScenario(
-				ActivityScenario.launch(EmptyActivity::class.java)
-		)
 
-		scenario
+		launchEmptyActivity()
 				.addFragment(fragment)
 				.getScopedViewModelOfActivity(fragment, holder, null)
 				.moveToState(Lifecycle.State.RESUMED)
@@ -47,11 +43,8 @@ class ViewModelClearedTest {
 	fun `viewModel of fragment cleared when fragment destroyed`() {
 		val fragment = Fragment()
 		val holder = Holder<TestViewModel>()
-		val scenario = ClearViewModelTestScenario(
-				ActivityScenario.launch(EmptyActivity::class.java)
-		)
 
-		scenario
+		launchEmptyActivity()
 				.addFragment(fragment)
 				.getScopedViewModelOfFragment(fragment, holder, null)
 				.moveToState(Lifecycle.State.RESUMED)
@@ -70,10 +63,8 @@ class ViewModelClearedTest {
 		val holder1 = Holder<TestViewModel>()
 		val holder2 = Holder<TestViewModel>()
 		val scope = "scope"
-		val scenario = ClearViewModelTestScenario(
-				ActivityScenario.launch(EmptyActivity::class.java))
 
-		scenario
+		launchEmptyActivity()
 				.addFragment(fragment1)
 				.getScopedViewModelOfActivity(fragment1, holder1, scope)
 				.addFragment(fragment2)
@@ -88,10 +79,8 @@ class ViewModelClearedTest {
 		val fragment = Fragment()
 		val holder1 = Holder<TestViewModel>()
 		val holder2 = Holder<TestViewModel>()
-		val scenario = ClearViewModelTestScenario(
-				ActivityScenario.launch(EmptyActivity::class.java))
 
-		scenario
+		launchEmptyActivity()
 				.addFragment(fragment)
 				.getVanillaViewModelOfActivity(holder2)
 				.getScopedViewModelOfActivity(fragment, holder1, null)
@@ -105,10 +94,8 @@ class ViewModelClearedTest {
 		val fragment = Fragment()
 		val holder1 = Holder<TestViewModel>()
 		val holder2 = Holder<TestViewModel>()
-		val scenario = ClearViewModelTestScenario(
-				ActivityScenario.launch(EmptyActivity::class.java))
 
-		scenario
+		launchEmptyActivity()
 				.addFragment(fragment)
 				.getScopedViewModelOfActivity(fragment, holder1, null)
 				.getVanillaViewModelOfActivity(holder2)
@@ -122,10 +109,8 @@ class ViewModelClearedTest {
 		val fragment = Fragment()
 		val holder1 = Holder<TestViewModel>()
 		val holder2 = Holder<TestViewModel>()
-		val scenario = ClearViewModelTestScenario(
-				ActivityScenario.launch(EmptyActivity::class.java))
 
-		scenario
+		launchEmptyActivity()
 				.addFragment(fragment)
 				.getVanillaViewModelOfFragment(fragment, holder2)
 				.getScopedViewModelOfFragment(fragment, holder1, null)
@@ -139,10 +124,8 @@ class ViewModelClearedTest {
 		val fragment = Fragment()
 		val holder1 = Holder<TestViewModel>()
 		val holder2 = Holder<TestViewModel>()
-		val scenario = ClearViewModelTestScenario(
-				ActivityScenario.launch(EmptyActivity::class.java))
 
-		scenario
+		launchEmptyActivity()
 				.addFragment(fragment)
 				.getScopedViewModelOfFragment(fragment, holder1, null)
 				.getVanillaViewModelOfFragment(fragment, holder2)
@@ -156,10 +139,8 @@ class ViewModelClearedTest {
 		val fragment1 = Fragment()
 		val holder = Holder<TestViewModel>()
 		val scope = "scope"
-		val scenario = ClearViewModelTestScenario(
-				ActivityScenario.launch(EmptyActivity::class.java))
 
-		scenario
+		launchEmptyActivity()
 				.addFragment(fragment1)
 				.getScopedViewModelOfActivity(fragment1, holder, scope)
 
@@ -179,10 +160,8 @@ class ViewModelClearedTest {
 		val fragment2 = Fragment()
 		val holder = Holder<TestViewModel>()
 		val scope = "scope"
-		val scenario = ClearViewModelTestScenario(
-				ActivityScenario.launch(EmptyActivity::class.java))
 
-		scenario
+		launchEmptyActivity()
 				.addFragment(fragment1)
 				.getScopedViewModelOfActivity(fragment1, holder, scope)
 				.addFragment(fragment2)
@@ -207,10 +186,8 @@ class ViewModelClearedTest {
 		val fragment2 = Fragment()
 		val holder = Holder<TestViewModel>()
 		val scope = "scope"
-		val scenario = ClearViewModelTestScenario(
-				ActivityScenario.launch(EmptyActivity::class.java))
 
-		scenario
+		launchEmptyActivity()
 				.addFragment(fragment1)
 				.getScopedViewModelOfActivity(fragment1, holder, scope)
 				.addFragment(fragment2)
@@ -229,17 +206,15 @@ class ViewModelClearedTest {
 		val fragment1 = TestFragment(scope)
 		val fragment2 = TestFragment(scope)
 		val holder = Holder<TestViewModel>()
-		val scenario = ClearViewModelTestScenario(
-				ActivityScenario.launch(EmptyActivity::class.java))
 
-		scenario
+		launchEmptyActivity()
 				.addFragment(fragment1)
 				.getScopedViewModelOfActivity(fragment1, holder, scope)
 
 				.moveToState(Lifecycle.State.RESUMED)
 				.verifyClearedNever(holder)
 
-				.fragments { it.replace(fragment2) }
+				.replaceFragment(fragment2)
 				.verifyClearedNever(holder)
 
 				.removeFragment(fragment2)
@@ -252,10 +227,8 @@ class ViewModelClearedTest {
 	@Test
 	fun `subscriptions not duplicate after recreate`() {
 		val owner = Holder<SubscriptionHost>()
-		val scenario = ClearViewModelTestScenario(
-				ActivityScenario.launch(EmptyActivity::class.java))
 
-		scenario
+		launchEmptyActivity()
 				.addFragment(TestFragment("scope"))
 				.moveToState(Lifecycle.State.RESUMED)
 				.onActivity {
@@ -273,10 +246,8 @@ class ViewModelClearedTest {
 	@Test
 	fun `subscriptions not created for unscoped fragments`() {
 		val owner = Holder<SubscriptionHost>()
-		val scenario = ClearViewModelTestScenario(
-				ActivityScenario.launch(EmptyActivity::class.java))
 
-		scenario
+		launchEmptyActivity()
 				.addFragment(TestFragment(null))
 				.moveToState(Lifecycle.State.RESUMED)
 				.onActivity {
@@ -289,10 +260,8 @@ class ViewModelClearedTest {
 	fun `fragment in backstack does not leak viewmodel`() {
 		val fragmentInBackStack = Fragment()
 		val holder = Holder<TestViewModel>()
-		val scenario = ClearViewModelTestScenario(
-				ActivityScenario.launch(EmptyActivity::class.java))
 
-		scenario
+		launchEmptyActivity()
 				.moveToState(Lifecycle.State.RESUMED)
 				.replaceFragment(fragmentInBackStack, true)
 				.getScopedViewModelOfFragment(fragmentInBackStack, holder, "scope")
@@ -311,10 +280,8 @@ class ViewModelClearedTest {
 	fun `nested fragment in backstack does not leak viewmodel`() {
 		val fragmentInBackStack = Fragment()
 		val holder = Holder<TestViewModel>()
-		val scenario = ClearViewModelTestScenario(
-				ActivityScenario.launch(EmptyActivity::class.java))
 
-		scenario
+		launchEmptyActivity()
 				.addFragment(MasterFragment(), true)
 				.moveToState(Lifecycle.State.RESUMED)
 				.nestedFragments {
@@ -332,6 +299,11 @@ class ViewModelClearedTest {
 
 				.moveToState(Lifecycle.State.DESTROYED)
 				.verifyClearedOnce(holder)
+	}
+
+	private fun launchEmptyActivity(): ClearViewModelTestScenario {
+		return ClearViewModelTestScenario(
+				ActivityScenario.launch(EmptyActivity::class.java))
 	}
 
 }
