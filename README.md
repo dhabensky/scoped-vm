@@ -40,6 +40,6 @@ allprojects {
 Add this to your module build.gradle
 ```
 dependencies {
-    implementation 'com.github.dhabensky:scoped-vm:0.4'
+    implementation 'com.github.dhabensky:scoped-vm:1.0'
 }
 ```
